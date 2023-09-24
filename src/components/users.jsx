@@ -59,12 +59,12 @@ function Users() {
 
     return (
       <tr id={user._id} key={user._id + "2"}>
-        <td scope="col">{user.name}</td>
-        <td scope="col">{buildQualities()}</td>
-        <td scope="col">{user.profession.name}</td>
-        <td scope="col">{user.completedMeetings}</td>
-        <td scope="col">{user.rate}</td>
-        <td scope="col">
+        <td>{user.name}</td>
+        <td>{buildQualities()}</td>
+        <td>{user.profession.name}</td>
+        <td>{user.completedMeetings}</td>
+        <td>{user.rate}</td>
+        <td>
           <button
             id={user._id + "del_btn"}
             className="btn btn-danger"
