@@ -16,12 +16,12 @@ function Users() {
   // Обрабатываем нажатие на кнопку
   function handleDelete(userId) {
     setUser((prevState) => {
-      handlePhrase();
+      renderPhrase();
       return prevState.filter((user) => user._id !== userId);
     });
   }
   // Отрабатываем изменение статусного текста
-  function handlePhrase() {
+  function renderPhrase() {
     statusText =
     users.length === 0 ? (
         <span className="badge bg-danger m-3">Nobody will party with you</span>
@@ -84,7 +84,7 @@ function Users() {
   if (users.length === 0) return <h1>{statusText}</h1>;
   return (
     <>
-      <h1>{statusText}</h1>
+      <h2>{statusText}</h2>
       <table className="table">
         {buildTableHead()}
         {buildTableBody(users)}
