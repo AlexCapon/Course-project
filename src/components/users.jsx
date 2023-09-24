@@ -81,7 +81,7 @@ function Users() {
     return <tbody>{users.map((user) => buildTableRow(user))}</tbody>;
   }
   // Рендерим список
-  if (users.length === 0) return <h1>{statusText}</h1>;
+  if (users.length === 0) return <h2>{statusText}</h2>;
   return (
     <>
       <h2>{statusText}</h2>
