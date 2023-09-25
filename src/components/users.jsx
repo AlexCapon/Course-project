@@ -13,7 +13,7 @@ function Users() {
         {users.length} people will party with you
       </span>
     );
-  // Обрабатываем нажатие на кнопку
+  // Обрабатываем удаление
   function handleDelete(userId) {
     setUser((prevState) => {
       renderPhrase();
