@@ -1,102 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import api from "../api";
-import { useState } from "react";
+// Компоненты
+import TalbeHead from "./tableHead";
+import User from "./user";
+import SearchStatus from "./searchStatus";
 
-function Users() {
+export default function Users() {
   const [users, setUser] = useState(api.users.fetchAll());
-  // Инициализируем статусный текст
-  let statusText =
-    users.length === 0 ? (
-      <span className="badge bg-danger m-3">Nobody will party with you</span>
-    ) : (
-      <span className="badge bg-primary m-3">
-        {users.length} people will party with you
-      </span>
-    );
   // Обрабатываем удаление
   function handleDelete(userId) {
     setUser((prevState) => {
-      renderPhrase();
       return prevState.filter((user) => user._id !== userId);
     });
   }
-  // Отрабатываем изменение статусного текста
-  function renderPhrase() {
-    statusText =
-      users.length === 0 ? (
-        <span className="badge bg-danger m-3">Nobody will party with you</span>
-      ) : (
-        <span className="badge bg-primary m-3">
-          {users.length} people will party with you
-        </span>
-      );
-  }
-  // Рендерим таблицу
-  function renderTable(users) {
-    // Строим голову таблицы
-    function buildTableHead() {
-      return (
-        <thead>
-          <tr>
-            <th scope="col">Имя</th>
-            <th scope="col">Качества</th>
-            <th scope="col">Профессия</th>
-            <th scope="col">Встретился, раз</th>
-            <th scope="col">Оценка</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-      );
-    }
-    // Строим строку в таблице
-    function buildTableRow(user) {
-      // Расставляем качества
-      function buildQualities() {
-        return user.qualities.map((quality) => (
-          <span key={quality.name} className={"badge  m-1 bg-" + quality.color}>
-            {quality.name}
-          </span>
-        ));
+  // Обрабатываем букмарк
+  function handleBookmark(userId) {
+    console.log(users);
+    const updatedUsers = users.map((user) => {
+      console.log(user._id === userId)
+      console.log('id', user._id);
+      console.log('p', userId)
+      if (user._id === userId) {
+        user.bookmark = !user.bookmark;
       }
-
-      return (
-        <tr id={user._id} key={user._id + "2"}>
-          <td>{user.name}</td>
-          <td>{buildQualities()}</td>
-          <td>{user.profession.name}</td>
-          <td>{user.completedMeetings}</td>
-          <td>{user.rate}</td>
-          <td>
-            <button
-              id={user._id + "del_btn"}
-              className="btn btn-danger"
-              onClick={() => handleDelete(user._id)}
-            >
-              delete
-            </button>
-          </td>
-        </tr>
-      );
-    }
-    // Строим тело таблицы
-    function buildTableBody(users) {
-      return <tbody>{users.map((user) => buildTableRow(user))}</tbody>;
-    }
-    return (
-      <table className="table">
-        {buildTableHead()}
-        {buildTableBody(users)}
-      </table>
-    );
+      return user;
+    });
+    console.log(updatedUsers);
+    setUser(updatedUsers);
   }
+
   // Рендерим список
-  if (users.length === 0) return <h2>{statusText}</h2>;
+  if (users.length === 0)
+    return (
+      <h2>
+        <SearchStatus {...users} />
+      </h2>
+    );
   return (
     <>
-      <h2>{statusText}</h2>
-      {renderTable(users)}
+      <h2>
+        <SearchStatus {...users} />
+      </h2>
+      <table className="table">
+        <TalbeHead />
+        <tbody>
+          {users.map((user) => (
+            <User
+              key={user._id}
+              {...user}
+              marked={false}
+              onDelete={handleDelete}
+              onMark={handleBookmark}
+            />
+          ))}
+        </tbody>
+      </table>
     </>
   );
 }
-
-export default Users;
