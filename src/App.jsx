@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-bind */
-/* eslint-disable react/jsx-filename-extension */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 import React, { useState } from 'react';
