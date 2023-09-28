@@ -15,24 +15,20 @@ export default function App() {
   }
   // Обрабатываем букмарк
   function handleBookmark(userId) {
-    console.log(users);
     const updatedUsers = users.map((user) => {
-      console.log(user._id === userId);
-      console.log("id", user._id);
-      console.log("p", userId);
       if (user._id === userId) {
         user.bookmark = !user.bookmark;
       }
       return user;
     });
-    console.log(updatedUsers);
     setUser(updatedUsers);
   }
+  
 
-  if (users.length === 0) return <SearchStatus users={users.length} />;
+  if (users.length === 0) return <SearchStatus number={users.length} />;
   return (
     <>
-      <h2><SearchStatus number={users.length} /></h2> 
+      <SearchStatus number={users.length} />
       <Users onDelete={handleDelete} onBookmark={handleBookmark} users={users} />
     </>
   );
