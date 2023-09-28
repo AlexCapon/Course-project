@@ -1,21 +1,24 @@
-import React, { useState } from "react";
-import api from "../api";
+/* eslint-disable react/jsx-no-bind */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 // Компоненты
-import User from "./user";
-import Pagination from "./pagination";
+import User from './user';
+import Pagination from './pagination';
 // Утилиты
-import paginate from "../utils/paginate";
+import paginate from '../utils/paginate';
 
-export default function Users(api) {
-  const users = api.users;
+export default function Users({ users, onDelete, onBookmark }) {
   // Пагинация
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
   const numberOfUsers = users.length;
   function handlePageChange(pageIndex) {
     setCurrentPage(pageIndex);
   }
-  const usersOnPage = paginate(users, currentPage, pageSize)
+  const usersOnPage = paginate(users, currentPage, pageSize);
 
   // Рендер
   return (
@@ -29,17 +32,17 @@ export default function Users(api) {
             <th scope="col">Встретился, раз</th>
             <th scope="col">Оценка</th>
             <th scope="col">Избранное</th>
-            <th scope="col"></th>
+            <th scope="col" />
           </tr>
         </thead>
         <tbody>
-          {usersOnPage.map((user, index) => (
+          {usersOnPage.map((user) => (
             <User
               key={user._id}
               {...user}
               marked={false}
-              onDelete={api.onDelete}
-              onMark={api.onBookmark}
+              onDelete={onDelete}
+              onMark={onBookmark}
             />
           ))}
         </tbody>
@@ -53,3 +56,9 @@ export default function Users(api) {
     </>
   );
 }
+Users.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  users: PropTypes.array.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onBookmark: PropTypes.func.isRequired,
+};

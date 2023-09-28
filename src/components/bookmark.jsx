@@ -1,4 +1,8 @@
-export default function Bookmark(user) {
+/* eslint-disable no-underscore-dangle */
+import React from 'react';
+import PropTypes from 'prop-types';
+
+export default function Bookmark({ bookmark, _id, onMark }) {
   const unmarkedIcon = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -23,16 +27,21 @@ export default function Bookmark(user) {
       <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z" />
     </svg>
   );
-  if (user.bookmark === true) {
+  if (bookmark === true) {
     return (
-      <button className="btn" onClick={() => user.onMark(user._id)}>
+      <button className="btn" onClick={() => onMark(_id)} type="button">
         {markedIcon}
       </button>
     );
   }
   return (
-    <button className="btn" onClick={() => user.onMark(user._id)}>
+    <button className="btn" onClick={() => onMark(_id)} type="button">
       {unmarkedIcon}
     </button>
   );
 }
+Bookmark.propTypes = {
+  _id: PropTypes.string.isRequired,
+  bookmark: PropTypes.bool.isRequired,
+  onMark: PropTypes.func.isRequired,
+};
