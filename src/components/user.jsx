@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-underscore-dangle */
 import React from 'react';
 // Компоненты
 import Qualities from './qualities';
@@ -9,6 +8,7 @@ export default function User(user) {
   const {
     _id, name, profession, completedMeetings, rate, onDelete,
   } = user;
+  // console.log('user', user);
   return (
     <tr id={_id} key={`${_id}2`}>
       <td>{name}</td>

@@ -22,5 +22,13 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'react/prop-types': 'warn',
+    'react/jsx-no-bind': 'warn',
+    'react/jsx-props-no-spreading': 'warn',
+    'jsx-a11y/click-events-have-key-events': 'warn',
+    'jsx-a11y/no-static-element-interactions': 'warn',
+    'jsx-a11y/anchor-is-valid': 'warn',
+    'no-unused-vars': 'warn',
+    'no-param-reassign': 'warn',
   },
 };

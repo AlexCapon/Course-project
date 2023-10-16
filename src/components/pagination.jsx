@@ -1,16 +1,16 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 export default function Pagination({
-  itemCount, pageSize, onPageChange, currentPage,
+  itemCount,
+  pageSize,
+  onPageChange,
+  currentPage,
 }) {
   const numberOfPages = [];
-  for (let i = 0; i < itemCount; i += pageSize) numberOfPages.push(numberOfPages.length + 1);
+  for (let i = 0; i < itemCount; i += pageSize) { numberOfPages.push(numberOfPages.length + 1); }
+  // Исправить баг с удалением пользователей на последней странице.Вписать в условие возврат на 1-ю.
   if (numberOfPages.length <= 1) return null;
   return (
     <nav>
@@ -19,7 +19,14 @@ export default function Pagination({
           const classOfPage = page === currentPage ? ' active' : '';
           return (
             <li className={`page-page${classOfPage}`} key={`page_${page}`}>
-              <a className="page-link btn" onClick={() => onPageChange(page)}>{page}</a>
+              <button
+                className="page-link btn"
+                type="button"
+                onClick={() => onPageChange(page)}
+                tabIndex={0}
+              >
+                {page}
+              </button>
             </li>
           );
         })}
@@ -27,3 +34,9 @@ export default function Pagination({
     </nav>
   );
 }
+Pagination.propTypes = {
+  itemCount: PropTypes.number.isRequired,
+  pageSize: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+};
