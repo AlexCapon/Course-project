@@ -14,11 +14,31 @@ function GroupList({
   onItemSelect,
   selectedItem,
 }) {
+  if (Array.isArray(items)) {
+    return (
+      // <select name="Загрузка...">
+      // eslint-disable-next-line max-len
+      //   {Object.values(items).map((item) => <option values={item[contentProperty]} className="list-group-item" onClick={() => { console.log('you clicked on', item); }} key={`${item[valueProperty]}`}>{item[contentProperty]}</option>)}
+      // </select>
+      <ul className="list-group">
+        {items.map((item) => (
+          <li
+            className={`list-group-item${item === selectedItem ? ' active' : ''}`}
+            role="button"
+            onClick={() => onItemSelect(item)}
+            key={item[valueProperty]}
+          >
+            {item[contentProperty]}
+          </li>
+        ))}
+      </ul>
+    );
+  }
   return (
-    // <select name="Загрузка...">
-    // eslint-disable-next-line max-len
-    //   {Object.values(items).map((item) => <option values={item[contentProperty]} className="list-group-item" onClick={() => { console.log('you clicked on', item); }} key={`${item[valueProperty]}`}>{item[contentProperty]}</option>)}
-    // </select>
+  // <select name="Загрузка...">
+  // eslint-disable-next-line max-len
+  //   {Object.values(items).map((item) => <option values={item[contentProperty]} className="list-group-item" onClick={() => { console.log('you clicked on', item); }} key={`${item[valueProperty]}`}>{item[contentProperty]}</option>)}
+  // </select> Object.values(items)
     <ul className="list-group">
       {Object.values(items).map((item) => (
         <li
@@ -36,13 +56,14 @@ function GroupList({
 GroupList.defaultProps = {
   valueProperty: '_id',
   contentProperty: 'name',
+  selectedItem: undefined,
 };
 GroupList.propTypes = {
   items: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   valueProperty: PropTypes.string,
   contentProperty: PropTypes.string,
   onItemSelect: PropTypes.func.isRequired,
-  selectedItem: PropTypes.object.isRequired,
+  selectedItem: PropTypes.object,
 };
 
 export default GroupList;

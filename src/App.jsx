@@ -1,31 +1,44 @@
+/* eslint-disable react/jsx-no-bind */
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable no-underscore-dangle */
+
 import React, { useState, useEffect } from 'react';
 import api from './api';
-
+// Компоненты
 import Users from './components/users';
 import SearchStatus from './components/searchStatus';
+// Утилиты
+import showError from './utils/showError';
 
 export default function App() {
   const [users, setUsers] = useState(api.users.fetchAll());
+  const [professions, setProfession] = useState(api.professions.fetchAll);
+
   useEffect(() => {
-    users.then((data) => setUsers(data));
+    if (!Object.values(users)[0]) {
+      users.then((data) => setUsers(data)).catch((error) => showError(error));
+    }
+  }, []);
+  useEffect(() => {
+    if (!Object.values(professions)[0]) {
+      professions.then((data) => setProfession(data)).catch((error) => showError(error));
+    }
   }, []);
   // Обрабатываем удаление
   function handleDelete(userId) {
     setUsers((prevState) => {
-      const usersAD = prevState.filter((user) => user._id !== userId);
-      console.log('usersAD', usersAD);
-      return usersAD;
+      const usersAfterDeletion = prevState.filter((user) => user._id !== userId);
+      return usersAfterDeletion;
     });
   }
   // Обрабатываем букмарк
   function handleBookmark(userId) {
     const updatedUsers = users.map((user) => {
+      const newUser = user;
       if (user._id === userId) {
-        user.bookmark = !user.bookmark;
+        newUser.bookmark = !newUser.bookmark;
       }
-      return user;
+      return newUser;
     });
     setUsers(updatedUsers);
   }
@@ -33,7 +46,12 @@ export default function App() {
   if (users.length === 0) return <SearchStatus number={users.length} />;
   return (
     <>
-      <Users onDelete={handleDelete} onBookmark={handleBookmark} users={users} />
+      <Users
+        onDelete={handleDelete}
+        onBookmark={handleBookmark}
+        users={users}
+        professions={professions}
+      />
     </>
   );
 }
