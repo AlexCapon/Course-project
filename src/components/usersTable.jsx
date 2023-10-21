@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 // Компоненты
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
+import Table from './table';
 import Bookmark from './bookmark';
 // eslint-disable-next-line no-unused-vars
 import showElement from '../utils/showElement';
@@ -20,7 +21,11 @@ export default function UsersTable({
   const columns = {
     name: { path: 'name', name: 'Имя' },
     // eslint-disable-next-line react/no-unstable-nested-components
-    qualities: { name: 'Качества', component: (user) => (<QualitiesList qualities={user.qualities} />) },
+    qualities: {
+      name: 'Качества',
+      // eslint-disable-next-line react/no-unstable-nested-components
+      component: (user) => <QualitiesList qualities={user.qualities} />,
+    },
     profession: { path: 'profession.name', name: 'Профессия' },
     completedMeetings: { path: 'completedMeetings', name: 'Встретился, раз' },
     rate: { path: 'rate', name: 'Оценка' },
@@ -48,14 +53,10 @@ export default function UsersTable({
     },
   };
   return (
-    <table className="table">
-      <TableHeader
-        selectedSort={selectedSort}
-        onSort={onSort}
-        columns={columns}
-      />
+    <Table>
+      <TableHeader selectedSort={selectedSort} onSort={onSort} columns={columns} />
       <TableBody columns={columns} data={usersOnPage} />
-    </table>
+    </Table>
   );
 }
 UsersTable.propTypes = {
