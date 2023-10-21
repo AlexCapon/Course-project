@@ -1,43 +1,60 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
 // Компоненты
-import User from './user';
+import TableHeader from './tableHeader';
+import TableBody from './tableBody';
+import Bookmark from './bookmark';
+// eslint-disable-next-line no-unused-vars
+import showElement from '../utils/showElement';
+import QualitiesList from './qualitiesList';
 
 export default function UsersTable({
-  usersOnPage, onDelete, onBookmark, onSort, currentSort,
+  usersOnPage,
+  onDelete,
+  onBookmark,
+  onSort,
+  selectedSort,
 }) {
-  function handleSort(item) {
-    if (currentSort.iter === item && currentSort.order === 'asc') {
-      onSort({ iter: item, order: 'desc' });
-    } else {
-      onSort({ iter: item, order: 'asc' });
-    }
-  }
+  const columns = {
+    name: { path: 'name', name: 'Имя' },
+    // eslint-disable-next-line react/no-unstable-nested-components
+    qualities: { name: 'Качества', component: (user) => (<QualitiesList qualities={user.qualities} />) },
+    profession: { path: 'profession.name', name: 'Профессия' },
+    completedMeetings: { path: 'completedMeetings', name: 'Встретился, раз' },
+    rate: { path: 'rate', name: 'Оценка' },
+    bookmark: {
+      path: 'bookmark',
+      name: 'Избранное',
+      caret: '',
+      // eslint-disable-next-line react/no-unstable-nested-components
+      component: (user) => (
+        <Bookmark status={user.bookmark} onMark={() => onBookmark(user._id)} />
+      ),
+    },
+    delete: {
+      // eslint-disable-next-line react/no-unstable-nested-components
+      component: (user) => (
+        <button
+          id={`${user._id}del_btn`}
+          className="btn btn-danger"
+          onClick={() => onDelete(user._id)}
+          type="button"
+        >
+          delete
+        </button>
+      ),
+    },
+  };
   return (
     <table className="table">
-      <thead>
-        <tr>
-          <th onClick={() => handleSort('name')} scope="col">Имя</th>
-          <th scope="col">Качества</th>
-          <th onClick={() => handleSort('profession.name')} scope="col">Профессия</th>
-          <th onClick={() => handleSort('completedMeetings')} scope="col">Встретился, раз</th>
-          <th onClick={() => handleSort('rate')} scope="col">Оценка</th>
-          <th onClick={() => handleSort('bookmark')} scope="col">Избранное</th>
-          <th scope="col" label="empty" />
-        </tr>
-      </thead>
-      <tbody>
-        {usersOnPage.map((user) => (
-          <User
-            key={user._id}
-            {...user}
-            marked={false}
-            onDelete={onDelete}
-            onMark={onBookmark}
-          />
-        ))}
-      </tbody>
+      <TableHeader
+        selectedSort={selectedSort}
+        onSort={onSort}
+        columns={columns}
+      />
+      <TableBody columns={columns} data={usersOnPage} />
     </table>
   );
 }
@@ -45,7 +62,7 @@ UsersTable.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   usersOnPage: PropTypes.array.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  currentSort: PropTypes.object.isRequired,
+  selectedSort: PropTypes.object.isRequired,
   onDelete: PropTypes.func.isRequired,
   onBookmark: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,

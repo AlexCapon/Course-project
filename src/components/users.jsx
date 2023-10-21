@@ -19,8 +19,10 @@ export default function Users({
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProfession, setSelectedProfession] = useState();
-  const [sortBy, setSortBy] = useState({ iter: 'name', order: 'asc' });
-  const pageSize = 4; // Количество пользователей которое можно поместить на одну страницу
+  const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
+
+  const pageSize = 9; // Количество пользователей которое можно поместить на одну страницу
+
   function handlePageChange(pageIndex) {
     setCurrentPage(pageIndex);
   }
@@ -31,15 +33,16 @@ export default function Users({
   function handleSort(item) {
     setSortBy(item);
   }
+
   // Фильтры
   const filteredUsers = selectedProfession
     ? users.filter((user) => user.profession.name === selectedProfession.name)
     : users;
   const numberOfUsers = filteredUsers.length ? filteredUsers.length : 0;
-  const sortedUsers = orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
+  const sortedUsers = orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
   const usersOnPage = users[0] ? paginate(sortedUsers, currentPage, pageSize) : [];
-  // Меняем страницу, если пользователь находиться на странице которой больше нет
-  useEffect(() => {
+
+  useEffect(() => { // Меняем страницу, если пользователь находиться на странице которой больше нет
     if (numberOfUsers > 0) {
       if (currentPage > Math.ceil(numberOfUsers / pageSize)) {
         setCurrentPage(Math.ceil(numberOfUsers / pageSize));
@@ -84,7 +87,7 @@ export default function Users({
         {users[0] ? (
           <UsersTable
             usersOnPage={usersOnPage}
-            currentSort={sortBy}
+            selectedSort={sortBy}
             onBookmark={onBookmark}
             onDelete={onDelete}
             onSort={handleSort}

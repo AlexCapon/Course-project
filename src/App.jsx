@@ -14,33 +14,31 @@ export default function App() {
   const [users, setUsers] = useState(api.users.fetchAll());
   const [professions, setProfession] = useState(api.professions.fetchAll);
 
-  useEffect(() => {
+  useEffect(() => { // Получаем юзеров из промися
     if (!Object.values(users)[0]) {
       users.then((data) => setUsers(data)).catch((error) => showError(error));
     }
   }, []);
-  useEffect(() => {
+  useEffect(() => { // Получаем профессии из промися
     if (!Object.values(professions)[0]) {
       professions.then((data) => setProfession(data)).catch((error) => showError(error));
     }
   }, []);
-  // Обрабатываем удаление
-  function handleDelete(userId) {
+  function handleDelete(userId) { // Обрабатываем удаление
     setUsers((prevState) => {
       const usersAfterDeletion = prevState.filter((user) => user._id !== userId);
       return usersAfterDeletion;
     });
   }
-  // Обрабатываем букмарк
-  function handleBookmark(userId) {
-    const updatedUsers = users.map((user) => {
+  function handleBookmark(userId) { // Обрабатываем букмарк
+    const updatedUsers = users.map((user) => { // Пробегаемся по всем юзерам
       const newUser = user;
-      if (user._id === userId) {
-        newUser.bookmark = !newUser.bookmark;
+      if (user._id === userId) { // Находим юзера по которому кликнули
+        newUser.bookmark = !newUser.bookmark; // Меняет статус букмарка на противоположный
       }
       return newUser;
     });
-    setUsers(updatedUsers);
+    setUsers(updatedUsers); // Возвращаем в стейт новый массив
   }
 
   if (users.length === 0) return <SearchStatus number={users.length} />;
