@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import showElement from '../utils/showElement';
 // Утилиты
 // eslint-disable-next-line no-unused-vars
-import showElement from '../utils/showElement';
 
 export default function Bookmark({ onMark, status }) {
   const unmarkedIcon = (

@@ -7,9 +7,9 @@ import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import Table from './table';
 import Bookmark from './bookmark';
+import QualitiesList from './qualitiesList';
 // eslint-disable-next-line no-unused-vars
 import showElement from '../utils/showElement';
-import QualitiesList from './qualitiesList';
 
 export default function UsersTable({
   usersOnPage,
@@ -53,10 +53,17 @@ export default function UsersTable({
     },
   };
   return (
-    <Table>
-      <TableHeader selectedSort={selectedSort} onSort={onSort} columns={columns} />
-      <TableBody columns={columns} data={usersOnPage} />
-    </Table>
+    <>
+      {usersOnPage[0] ? (
+        <Table>
+          <TableHeader selectedSort={selectedSort} onSort={onSort} columns={columns} />
+          <TableBody columns={columns} data={usersOnPage} />
+        </Table>
+      ) : (
+        <h2> </h2>
+      )}
+      ;
+    </>
   );
 }
 UsersTable.propTypes = {

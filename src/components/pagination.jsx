@@ -10,7 +10,6 @@ export default function Pagination({
 }) {
   const numberOfPages = [];
   for (let i = 0; i < itemCount; i += pageSize) { numberOfPages.push(numberOfPages.length + 1); }
-  // Исправить баг с удалением пользователей на последней странице.Вписать в условие возврат на 1-ю.
   if (numberOfPages.length <= 1) return null;
   return (
     <nav>

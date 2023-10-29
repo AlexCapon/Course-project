@@ -30,5 +30,6 @@ module.exports = {
     'jsx-a11y/anchor-is-valid': 'warn',
     'no-unused-vars': 'warn',
     'no-param-reassign': 'warn',
+    'import/no-extraneous-dependencies': 'warn',
   },
 };

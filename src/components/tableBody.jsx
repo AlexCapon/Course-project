@@ -1,15 +1,19 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
+import { Link } from 'react-router-dom';
 import lod from 'lodash';
 import PropTypes from 'prop-types';
-// Компоненты
 // Утилиты
 // eslint-disable-next-line no-unused-vars
 import showElement from '../utils/showElement';
 
 export default function TableBody({ data, columns }) {
   function renderContent(item, column) {
+    if (columns[column].path === 'name') {
+      return <Link to={`/users/${item._id}`}>{item.name}</Link>;
+    }
     if (columns[column].component) {
       const { component } = columns[column];
       if (typeof (component) === 'function') {
