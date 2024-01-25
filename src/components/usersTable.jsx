@@ -1,6 +1,8 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // Компоненты
 import TableHeader from './tableHeader';
@@ -19,11 +21,13 @@ export default function UsersTable({
   selectedSort,
 }) {
   const columns = {
-    name: { path: 'name', name: 'Имя' },
-    // eslint-disable-next-line react/no-unstable-nested-components
+    name: {
+      path: 'name',
+      name: 'Имя',
+      component: (user) => <Link to={`/users/${user._id}`}>{user.name}</Link>,
+    },
     qualities: {
       name: 'Качества',
-      // eslint-disable-next-line react/no-unstable-nested-components
       component: (user) => <QualitiesList qualities={user.qualities} />,
     },
     profession: { path: 'profession.name', name: 'Профессия' },
@@ -33,13 +37,11 @@ export default function UsersTable({
       path: 'bookmark',
       name: 'Избранное',
       caret: '',
-      // eslint-disable-next-line react/no-unstable-nested-components
       component: (user) => (
         <Bookmark status={user.bookmark} onMark={() => onBookmark(user._id)} />
       ),
     },
     delete: {
-      // eslint-disable-next-line react/no-unstable-nested-components
       component: (user) => (
         <button
           id={`${user._id}del_btn`}
@@ -52,20 +54,20 @@ export default function UsersTable({
       ),
     },
   };
-  return (
-    <>
-      {usersOnPage[0] ? (
-        <Table>
-          <TableHeader selectedSort={selectedSort} onSort={onSort} columns={columns} />
-          <TableBody columns={columns} data={usersOnPage} />
-        </Table>
-      ) : (
-        <h2> </h2>
-      )}
-      ;
-    </>
+  return usersOnPage[0] ? (
+    <Table>
+      <TableHeader
+        columns={columns}
+        selectedSort={selectedSort}
+        onSort={onSort}
+      />
+      <TableBody columns={columns} data={usersOnPage} />
+    </Table>
+  ) : (
+    <h2> </h2>
   );
 }
+
 UsersTable.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   usersOnPage: PropTypes.array.isRequired,
