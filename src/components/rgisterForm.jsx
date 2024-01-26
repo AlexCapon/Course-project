@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-bind */
 import React, { useEffect, useState } from 'react';
 import showElement from '../utils/showElement';
 import InputField from './inputField';

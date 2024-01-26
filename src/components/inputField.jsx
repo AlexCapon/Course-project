@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+// eslint-disable-next-line no-unused-vars
 import showElement from '../utils/showElement';
 import { eyeOpenIcon, eyeShutIcon } from '../assets/icons';
 
@@ -12,7 +14,7 @@ export default function InputField({
 }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  function togglePasswordVisibility(input) {
+  function togglePasswordVisibility() {
     setPasswordVisible((prevState) => !prevState);
   }
   const eyeIcon = passwordVisible ? eyeOpenIcon : eyeShutIcon;
@@ -44,3 +46,20 @@ export default function InputField({
     </div>
   );
 }
+
+InputField.propTypes = {
+  label: PropTypes.string,
+  name: PropTypes.string,
+  type: PropTypes.string,
+  value: PropTypes.string,
+  error: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+};
+
+InputField.defaultProps = {
+  label: 'Поле для текста',
+  name: `textInput-${Date.now()}`,
+  type: 'text',
+  value: '',
+  error: undefined,
+};
