@@ -3,7 +3,6 @@
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable no-underscore-dangle */
-// Импорты
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../api';
@@ -20,7 +19,7 @@ import Pagination from '../components/pagination';
 import GroupList from '../components/groupList';
 import User from '../components/user';
 import SearchInput from '../components/searchInput';
-// Основной компонент
+
 export default function Users() {
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState(api.users.fetchAll());
@@ -29,8 +28,7 @@ export default function Users() {
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
   const [searchInput, setSearchInput] = useState({ value: '' });
   const { userId } = useParams();
-
-  const pageSize = 8; // Количество пользователей которое можно поместить на одну страницу
+  const pageSize = 8;
 
   useEffect(() => { // Получаем юзеров из промися
     if (!Object.values(users)[0]) {
@@ -54,6 +52,23 @@ export default function Users() {
       ...prevState,
       value: '',
     }));
+  }
+  function filterUsersByProf() {
+    return selectedProfession
+      ? users.filter((user) => user.profession.name === selectedProfession.name)
+      : users;
+  }
+  function filterUsersBySearch() {
+    const condition = searchInput.value !== '' ? new RegExp(searchInput.value) : '';
+    if (condition !== '') {
+      if (selectedProfession) {
+        clearFilter();
+      }
+      if (users[0]) {
+        return users.filter((user) => condition.test(user.name));
+      }
+    }
+    return users;
   }
 
   function handleDelete(deletingUserId) {
@@ -93,23 +108,6 @@ export default function Users() {
     }));
   }
 
-  function filterUsersByProf() {
-    return selectedProfession
-      ? users.filter((user) => user.profession.name === selectedProfession.name)
-      : users;
-  }
-  function filterUsersBySearch() {
-    const condition = searchInput.value !== '' ? new RegExp(searchInput.value) : '';
-    if (condition !== '') {
-      if (selectedProfession) {
-        clearFilter();
-      }
-      if (users[0]) {
-        return users.filter((user) => condition.test(user.name));
-      }
-    }
-    return users;
-  }
   const filteredUsers = searchInput.value ? filterUsersBySearch() : filterUsersByProf();
   function getDisplayedUsers() {
     const sortedUsers = orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
@@ -133,36 +131,38 @@ export default function Users() {
   if (!Array.isArray(users)) <h2><span className="badge bg-warning m-3">Загрузка...</span></h2>;
   // Если готовы - отображаем таблицу или страницу выбраного пользователя
   return userId ? (
-    <div className="d-flex justify-content-center">
+    <div id="userPageContainer" className="d-flex justify-content-center">
       <User
         user={usersOnPage.filter((user) => user._id === userId)[0]}
       />
     </div>
   ) : (
     <div id="layoutContainer" className="d-flex">
-      {Object.values(professions)[0] ? (
-        <div id="profFiltersContainer" className="d-flex flex-column shrink-0 p-3">
-          <GroupList
-            selectedItem={selectedProfession}
-            items={professions}
-            onItemSelect={handleItemSelect}
-          />
-          <button
-            className="btn btn-secondary mt-2"
-            type="button"
-            onClick={clearFilter}
-          >
-            Отчистить Фильтры
-          </button>
-        </div>
-      ) : (
-        <div id="profFilterLoader" className="d-flex flex-column shrink-0 p-4 m-4">
-          <ul className="list-group">
-            <span className="list-group-item">Загрузка...</span>
-          </ul>
-        </div>
-      )}
-      <div id="container" className="d-flex flex-column">
+      <div id="filtersContainer">
+        {Object.values(professions)[0] ? (
+          <div id="profFiltersContainer" className="d-flex flex-column shrink-0 p-3">
+            <GroupList
+              selectedItem={selectedProfession}
+              items={professions}
+              onItemSelect={handleItemSelect}
+            />
+            <button
+              className="btn btn-secondary mt-2"
+              type="button"
+              onClick={clearFilter}
+            >
+              Отчистить Фильтры
+            </button>
+          </div>
+        ) : (
+          <div id="profFilterLoader" className="d-flex flex-column shrink-0 p-4 m-4">
+            <ul className="list-group">
+              <span className="list-group-item">Загрузка...</span>
+            </ul>
+          </div>
+        )}
+      </div>
+      <div id="bodyContainer" className="d-flex flex-column">
         <SearchStatus number={numberOfDisplayedUsers} />
         <SearchInput onChange={handleSearchChange} />
         <UsersTable
