@@ -19,7 +19,7 @@ export default function App() {
         <Route path="/login/:register?" Component={LoginPage} />
         <Route path="/users/:userId?" Component={Users} />
         <Route path="/404" Component={NotFoundPage} />
-        {/* <Route path="*" element={<Navigate to="/404" />} /> */}
+        <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
     </div>
   );
