@@ -1,14 +1,13 @@
 /* eslint-disable react/jsx-no-bind */
 import React, { useEffect, useState } from 'react';
-import showElement from '../utils/showElement';
-import InputField from './inputField';
-import validator from '../utils/validator';
+import showElement from '../../utils/showElement';
+import InputField from '../common/form/inputField';
+import validator from '../../utils/validator';
 
-export default function RegisterForm() {
+export default function LoginForm() {
   const emptyData = { email: '', password: '' };
   const [data, setData] = useState(emptyData);
   const [errors, setErrors] = useState({});
-  showElement(errors, 'errors');
 
   const validatorConfig = {
     email: {
@@ -50,12 +49,11 @@ export default function RegisterForm() {
   function handleSubmit() {
     const dataIsValid = validate();
     if (dataIsValid) {
-      const newUser = {
+      const logingInUser = {
         username: data.email,
         password: data.password,
-        id: Date.now() + data.email,
       };
-      showElement(newUser, 'Trying to register user...');
+      showElement(logingInUser, 'user trying to login...');
       setData(emptyData);
     }
   }
@@ -66,17 +64,17 @@ export default function RegisterForm() {
   }, [data]);
 
   return (
-    <div className="">
-      <h2>Регистрация</h2>
+    <div className="container">
+      <h2>Авторизация</h2>
       <form id="loginForm" onChange={handleChange} className="form mb-5">
-        <InputField name="email" type="text" value={data.email} label="E-mail" onChange={handleChange} error={errors.email} />
-        <InputField name="password" type="password" value={data.password} label="Пароль" onChange={handleChange} error={errors.password} />
-        <button type="button" onClick={handleSubmit} className="btn btn-primary mt-2 mx-auto w-100" disabled={formIsInvalid}>Зарегестрироваться</button>
+        <InputField name="email" type="text" value={data.email} label="E-mail" onChange={handleChange} error={errors.email} placeholder="adress@mail.com" />
+        <InputField name="password" type="password" value={data.password} label="Пароль" onChange={handleChange} error={errors.password} placeholder="It1sAGo0dP@ss!" />
+        <button type="button" onClick={handleSubmit} className="btn btn-primary mt-2 mx-auto w-100" disabled={formIsInvalid}>Войти</button>
       </form>
       <span className="w-100">
-        Уже есть аккаунт?
+        Нет аккаунта?
         {' '}
-        <a href="/login">Авторизируйтесь!</a>
+        <a href="/login/register">Зарегестрируйтесь!</a>
       </span>
     </div>
   );

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
-import showElement from '../utils/showElement';
-import { eyeOpenIcon, eyeShutIcon } from '../assets/icons';
+import showElement from '../../../utils/showElement';
+import { eyeOpenIcon, eyeShutIcon } from '../../../assets/icons';
 
 export default function InputField({
   value,
@@ -11,6 +11,7 @@ export default function InputField({
   type,
   label,
   error,
+  placeholder,
 }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -19,12 +20,10 @@ export default function InputField({
   }
   const eyeIcon = passwordVisible ? eyeOpenIcon : eyeShutIcon;
 
-  const inputClass = `form-control mt-1 mb-1 ${
-    error ? 'is-invalid' : ''
-  }`;
+  const inputClass = `form-control mt-1 mb-1 ${error ? 'is-invalid' : ''}`;
 
   return (
-    <div className="m-2">
+    <div>
       <label htmlFor={name} className="label-control">
         {label}
       </label>
@@ -35,6 +34,7 @@ export default function InputField({
           value={value}
           onChange={onChange}
           className={inputClass}
+          placeholder={placeholder}
         />
         {type === 'password' && (
         <button className="btn btn-outline-secondary mt-1 mb-1" type="button" onClick={togglePasswordVisibility}>
@@ -54,12 +54,14 @@ InputField.propTypes = {
   value: PropTypes.string,
   error: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
 };
 
 InputField.defaultProps = {
-  label: 'Поле для текста',
+  label: undefined,
   name: `textInput-${Date.now()}`,
   type: 'text',
   value: '',
   error: undefined,
+  placeholder: undefined,
 };

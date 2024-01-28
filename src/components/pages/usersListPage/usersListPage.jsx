@@ -4,30 +4,27 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable no-underscore-dangle */
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import api from '../api';
+import api from '../../../api';
 // Утилиты
 import { orderBy } from 'lodash';
-import paginate from '../utils/paginate';
-import showError from '../utils/showError';
+import paginate from '../../../utils/paginate';
+import showError from '../../../utils/showError';
 // eslint-disable-next-line no-unused-vars
-import showElement from '../utils/showElement';
+import showElement from '../../../utils/showElement';
 // Компоненты
-import SearchStatus from '../components/searchStatus';
-import UsersTable from '../components/usersTable';
-import Pagination from '../components/pagination';
-import GroupList from '../components/groupList';
-import User from '../components/user';
-import SearchInput from '../components/searchInput';
+import SearchStatus from '../../ui/searchStatus';
+import UsersTable from '../../ui/usersTable';
+import Pagination from '../../common/pagination';
+import GroupList from '../../common/groupList';
+import SearchInput from '../../ui/searchInput';
 
-export default function Users() {
+export default function UsersListPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState(api.users.fetchAll());
   const [professions, setProfession] = useState(api.professions.fetchAll());
   const [selectedProfession, setSelectedProfession] = useState();
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
   const [searchInput, setSearchInput] = useState({ value: '' });
-  const { userId } = useParams();
   const pageSize = 8;
 
   useEffect(() => { // Получаем юзеров из промися
@@ -47,7 +44,6 @@ export default function Users() {
     setSelectedProfession(undefined);
   }
   function clearSearch() {
-    document.querySelector('#searchInput').value = '';
     setSearchInput((prevState) => ({
       ...prevState,
       value: '',
@@ -128,15 +124,9 @@ export default function Users() {
 
   // Рендер
   // Делаем проверку на наличие данных с сервера, если данные не готовы - отображаем загрузчик
-  if (!Array.isArray(users)) <h2><span className="badge bg-warning m-3">Загрузка...</span></h2>;
-  // Если готовы - отображаем таблицу или страницу выбраного пользователя
-  return userId ? (
-    <div id="userPageContainer" className="d-flex justify-content-center">
-      <User
-        user={usersOnPage.filter((user) => user._id === userId)[0]}
-      />
-    </div>
-  ) : (
+  if (!Array.isArray(users)) return <h2><span className="badge bg-warning m-3">Загрузка...</span></h2>;
+  // Если готовы - отображаем таблицу.
+  return (
     <div id="layoutContainer" className="d-flex">
       <div id="filtersContainer">
         {Object.values(professions)[0] ? (
@@ -164,14 +154,13 @@ export default function Users() {
       </div>
       <div id="bodyContainer" className="d-flex flex-column">
         <SearchStatus number={numberOfDisplayedUsers} />
-        <SearchInput onChange={handleSearchChange} />
+        <SearchInput onChange={handleSearchChange} value={searchInput.value} />
         <UsersTable
           usersOnPage={usersOnPage}
           selectedSort={sortBy}
           onBookmark={handleBookmark}
           onDelete={handleDelete}
           onSort={handleSort}
-          userId={userId}
         />
         <div id="paginationContainer" className="d-flex justify-content-center">
           <Pagination

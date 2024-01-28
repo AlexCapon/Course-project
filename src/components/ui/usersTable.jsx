@@ -5,13 +5,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // Компоненты
-import TableHeader from './tableHeader';
-import TableBody from './tableBody';
-import Table from './table';
-import Bookmark from './bookmark';
-import QualitiesList from './qualitiesList';
+import Table, { TableBody, TableHeader } from '../common/table';
+import Bookmark from '../common/bookmark';
+import Qualities from './qualities';
 // eslint-disable-next-line no-unused-vars
-import showElement from '../utils/showElement';
+import showElement from '../../utils/showElement';
 
 export default function UsersTable({
   usersOnPage,
@@ -28,7 +26,7 @@ export default function UsersTable({
     },
     qualities: {
       name: 'Качества',
-      component: (user) => <QualitiesList qualities={user.qualities} />,
+      component: (user) => <Qualities qualities={user.qualities} />,
     },
     profession: { path: 'profession.name', name: 'Профессия' },
     completedMeetings: { path: 'completedMeetings', name: 'Встретился, раз' },
@@ -54,18 +52,30 @@ export default function UsersTable({
       ),
     },
   };
-  return usersOnPage[0] ? (
-    <Table>
-      <TableHeader
-        columns={columns}
-        selectedSort={selectedSort}
-        onSort={onSort}
-      />
-      <TableBody columns={columns} data={usersOnPage} />
-    </Table>
-  ) : (
-    <h2> </h2>
-  );
+  if (usersOnPage.length > 0) {
+    return (
+      <Table>
+        <TableHeader
+          columns={columns}
+          selectedSort={selectedSort}
+          onSort={onSort}
+        />
+        <TableBody columns={columns} data={usersOnPage} />
+      </Table>
+    );
+  }
+  // return usersOnPage[0] ? (
+  //   <Table>
+  //     <TableHeader
+  //       columns={columns}
+  //       selectedSort={selectedSort}
+  //       onSort={onSort}
+  //     />
+  //     <TableBody columns={columns} data={usersOnPage} />
+  //   </Table>
+  // ) : (
+  //   <h2> </h2>
+  // );
 }
 
 UsersTable.propTypes = {

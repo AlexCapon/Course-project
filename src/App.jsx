@@ -4,11 +4,11 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 // Компоненты
-import Users from './pages/users';
-import MainPage from './pages/main';
-import LoginPage from './pages/login';
-import NavBar from './navBar';
-import NotFoundPage from './pages/notFoundPage';
+import Users from './layouts/users';
+import MainPage from './layouts/main';
+import Login from './layouts/login';
+import NavBar from './components/ui/navBar';
+import NotFoundPage from './components/pages/notFoundPage';
 
 export default function App() {
   return (
@@ -16,7 +16,7 @@ export default function App() {
       <NavBar />
       <Routes>
         <Route index Component={MainPage} />
-        <Route path="/login/:register?" Component={LoginPage} />
+        <Route path="/login/:register?" Component={Login} />
         <Route path="/users/:userId?" Component={Users} />
         <Route path="/404" Component={NotFoundPage} />
         <Route path="*" element={<Navigate to="/404" />} />

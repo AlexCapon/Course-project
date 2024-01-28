@@ -4,7 +4,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
-import showElement from './utils/showElement';
+import showElement from '../../utils/showElement';
 
 export default function NavBar() {
   return (
