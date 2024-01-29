@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes, { shape } from 'prop-types';
 
-export default function Select({
+export default function SelectInput({
   options,
   value,
   onChange,
@@ -24,7 +24,9 @@ export default function Select({
             value={value}
             onChange={onChange}
           >
-            <option id="defaultOption" disabled value="">{defaultOption}</option>
+            <option id="defaultOption" disabled value="">
+              {defaultOption}
+            </option>
             {Array.isArray(options) ? (
               options.map((option) => (
                 <option value={option._id} key={option._id}>
@@ -32,7 +34,9 @@ export default function Select({
                 </option>
               ))
             ) : (
-              <option disabled defaultValue="">Загрузка...</option>
+              <option disabled defaultValue="">
+                Загрузка...
+              </option>
             )}
           </select>
           {error && <div className="invalid-feedback">{error}</div>}
@@ -42,19 +46,17 @@ export default function Select({
   );
 }
 
-Select.propTypes = {
-  options: PropTypes.arrayOf(
-    shape({
-      id_: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
+SelectInput.propTypes = {
+  options: PropTypes.arrayOf(shape({
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+  })).isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   error: PropTypes.string,
   label: PropTypes.string.isRequired,
   defaultOption: PropTypes.string.isRequired,
 };
-Select.defaultProps = {
+SelectInput.defaultProps = {
   error: undefined,
 };

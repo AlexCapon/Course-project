@@ -6,11 +6,14 @@ import InputField from '../common/form/inputField';
 import showElement from '../../utils/showElement';
 import showError from '../../utils/showError';
 import validator from '../../utils/validator';
-import Select from '../common/form/select';
+import SelectInput from '../common/form/selectInput';
+import RadioInput from '../common/form/radioInput';
 
 export default function RegisterForm() {
-  const emptyData = { email: '', password: '', profession: '' };
-  const [data, setData] = useState(emptyData);
+  const defaultData = {
+    email: '', password: '', profession: '', sex: 'male',
+  };
+  const [data, setData] = useState(defaultData);
   const [errors, setErrors] = useState({});
   const [professions, setPropfessions] = useState(api.professions.fetchAll());
 
@@ -21,7 +24,6 @@ export default function RegisterForm() {
         .catch((err) => showError(err));
     }
   }, []);
-  showElement(professions, 'professions');
   const validatorConfig = {
     email: {
       isRequired: {
@@ -73,10 +75,12 @@ export default function RegisterForm() {
         profession: professions.filter(
           (prof) => prof._id === data.profession,
         )[0],
+        sex: data.sex,
+        qualities: ['smart'],
         id: Date.now() + data.email,
       };
       showElement(newUser, 'Trying to register user...');
-      setData(emptyData);
+      setData(defaultData);
     }
   }
   const formIsInvalid = Object.keys(errors).length !== 0;
@@ -85,8 +89,13 @@ export default function RegisterForm() {
     validate();
   }, [data]);
 
+  const registerSexOptions = [
+    { name: 'Муж', value: 'male' },
+    { name: 'Жен', value: 'female' },
+    { name: 'Др', value: 'other' },
+  ];
   return (
-    <div className="">
+    <div>
       <h2>Регистрация</h2>
       <form id="loginForm" onChange={handleChange} className="form mb-5 ms-2">
         <InputField
@@ -107,7 +116,7 @@ export default function RegisterForm() {
           error={errors.password}
           onChange={handleChange}
         />
-        <Select
+        <SelectInput
           label="Профессии"
           defaultOption="Выберете профессию"
           options={professions}
@@ -115,9 +124,16 @@ export default function RegisterForm() {
           error={errors.profession}
           onChange={handleChange}
         />
+        <RadioInput
+          label="Пол:"
+          name="sex"
+          value={data.sex}
+          onChange={handleChange}
+          options={registerSexOptions}
+        />
         <button
-          type="button"
           onClick={handleSubmit}
+          type="button"
           className="btn btn-primary mt-2 mx-auto w-100"
           disabled={formIsInvalid}
         >
